@@ -1,9 +1,1 @@
 ---
-- name: "Enable and start Redis"
-  register: redis_service_status
-  failed_when: not (redis_service_status.state != "started" or redis_service_status.state != "inactive")
-  changed_when: not (redis_service_status.state != "started" or redis_service_status.state != "inactive")
-  ansible.builtin.service:
-    name: "redis@{{ redis_port }}"
-    state: "started"
-    enabled: yes
