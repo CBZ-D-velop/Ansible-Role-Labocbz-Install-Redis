@@ -25,3 +25,6 @@ redis_ssl_key: "{{ redis_ssl_path }}/{{ redis_ssl_domain }}/{{ redis_ssl_domain 
 redis_ssl_cert: "{{ redis_ssl_path }}/{{ redis_ssl_domain }}/{{ redis_ssl_domain }}.crt"
 redis_ssl_ca: "/etc/ssl/cacerts"
 redis_ssl_auth_client: no
+
+redis_user: "redis"
+redis_group: "{{ redis_user }}"

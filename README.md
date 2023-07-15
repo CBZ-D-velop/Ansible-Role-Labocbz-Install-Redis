@@ -18,6 +18,15 @@
 
 An Ansible role to install and configure a Redis server on your host.
 
+
+The Ansible role installs Redis on a target system and offers additional features to facilitate the deployment of Redis as a service. The role supports the installation and execution of Redis in service mode. Additionally, if you want to set up a Redis cluster, it provides the flexibility to create multiple Redis services based on the chosen port number, for example, redis@6378. This enables running multiple Redis instances on a single machine, making it feasible to host three Redis servers on three individual machines, ultimately achieving the required nine Redis servers (3 masters + 2 replicas each).
+
+In the context of a Redis cluster, to establish three master nodes, you would need a total of nine servers, taking into account both master and replica nodes. However, this configuration can be costly due to the number of required servers. To address this concern, the role proposes an alternative approach, allowing the creation of multiple Redis services on a single machine, each identified by a unique port number. By doing so, you can distribute the Redis services across fewer physical servers while still achieving the desired nine Redis servers.
+
+The role's configurability is achieved through variables, enabling you to define the desired Redis configuration, including the bind address, port, protected mode, log level, and authentication settings. You can also set up SSL support with custom SSL certificate paths. Additionally, the role provides options for Redis cluster-related settings, such as specifying the number of replicas and whether to bootstrap the cluster.
+
+In summary, the Redis role simplifies the installation and deployment of Redis, offering the flexibility to create Redis services with customizable settings, facilitating the setup of Redis clusters while optimizing resource utilization. Its rich configuration options empower administrators to tailor Redis deployments to their specific requirements, providing a robust solution for efficient and scalable Redis infrastructures.
+
 ## Folder structure
 
 By default Ansible will look in each directory within a role for a main.yml file for relevant content (also man.yml and main):

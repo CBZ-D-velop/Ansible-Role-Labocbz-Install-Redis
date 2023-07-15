@@ -1067,12 +1067,12 @@ hz 10
 # big latency spikes.
 aof-rewrite-incremental-fsync yes
 
-{% if redis_ssl %}
+{% if redis_ssl | default(false) %}
 ############################### SSL/TLS CONFIG ###############################
 port 0
 tls-port {{ redis_port }}
 
-{% if redis_cluster %}
+{% if redis_cluster | default(false) %}
 tls-cluster yes
 tls-replication yes
 {% endif %}

@@ -5,7 +5,7 @@
 ##############################
 
 [Unit]
-Description=Advanced key-value store
+Description=Redis, an advanced key-value store
 After=network.target
 Documentation=http://redis.io/documentation, man:redis-server(1)
 
@@ -15,8 +15,8 @@ ExecStart=/usr/bin/redis-server {{ redis_conf }} --supervised systemd --daemoniz
 PIDFile=/run/redis/redis-server-{{ redis_port }}.pid
 TimeoutStopSec=0
 Restart=always
-User=redis
-Group=redis
+User={{ redis_user }}
+Group={{ redis_group }}
 RuntimeDirectory=redis
 RuntimeDirectoryMode=2755
 
