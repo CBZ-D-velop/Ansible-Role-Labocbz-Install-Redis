@@ -1,0 +1,35 @@
+---
+- name: "Converge"
+  hosts: "all"
+  tasks:
+    # replace these tasks with whatever you find suitable to test
+    - name: "Copy something to test use of synchronize module"
+      ansible.builtin.copy:
+        src: "/etc/hosts"
+        dest: "/tmp/hosts-from-controller"
+        mode: 0700
+
+    - name: "Include labocbz.install_redis"
+      tags:
+        - "labocbz.install_redis"
+      loop: "{{ inv_redis_ports }}"
+      loop_control:
+        loop_var: port
+      vars:
+        redis_bind: "{{ inv_redis_bind }}"
+        redis_port: "{{ port }}"
+        redis_proteced_mode: "{{ inv_redis_proteced_mode }}"
+        redis_loglevel: "{{ inv_redis_loglevel }}"
+        redis_requirepass: "{{ inv_redis_requirepass }}"
+        redis_cluster: "{{ inv_redis_cluster }}"
+        redis_path: "{{ inv_redis_path }}"
+        redis_conf: "{{ inv_redis_conf }}"
+        redis_ssl: "{{ inv_redis_ssl }}"
+        redis_ssl_domain: "{{ inv_redis_ssl_domain }}"
+        redis_ssl_path: "{{ inv_redis_ssl_path }}"
+        redis_ssl_key: "{{ inv_redis_ssl_key }}"
+        redis_ssl_cert: "{{ inv_redis_ssl_cert }}"
+        redis_ssl_ca: "{{ inv_redis_ssl_ca }}"
+        redis_ssl_auth_client: "{{ inv_redis_ssl_auth_client }}"
+      ansible.builtin.include_role:
+        name: "labocbz.install_redis"

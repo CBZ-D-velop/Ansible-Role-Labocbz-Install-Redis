@@ -1,0 +1,78 @@
+---
+- name: "Install packages"
+  ansible.builtin.package:
+    update_cache: true
+    name:
+      - redis
+
+- name: "Disable default Redis service"
+  block:
+    - name: "Get Redis standalone service current state"
+      register: redis_service_status
+      ansible.builtin.systemd:
+        name: "redis"
+    
+    - name: "Disable Redis standalone"
+      when: redis_service_status.status.ActiveState == "active"
+      ansible.builtin.service:
+        name: "redis"
+        state: "stopped"
+        daemon_reload: true
+
+    - name: "Check Redis service file"
+      register: folder_check
+      ansible.builtin.stat:
+        path: "/etc/systemd/system/redis.service"
+
+    - name: "Remove Redis service file"
+      register: folder_check
+      when: folder_check.stat.exists
+      ansible.builtin.file:
+        path: "/etc/systemd/system/redis.service"
+        state: absent
+
+- name: "Configure Redis server redis@{{ redis_port }}"
+  block:
+    - name: "Prepare Redis server folders"
+      register: output
+      changed_when: output.size <= 0
+      loop:
+        - "{{ redis_lib_path }}"
+        - "{{ redis_run_path }}"
+        - "{{ redis_log_path }}"
+        - "{{ redis_dir }}"
+        - "{{ redis_path }}"
+      loop_control:
+        loop_var: folder
+      ansible.builtin.file:
+        path: "{{ folder }}"
+        state: directory
+        recurse: yes
+        group: "redis"
+        owner: "redis"
+        mode: 0744
+
+    - name: "Import Redis service redis@{{ redis_port }}"
+      ansible.builtin.template:
+        src: "templates/redis.service.j2"
+        dest: "/etc/systemd/system/redis@{{ redis_port }}.service"
+        owner: "root"
+        group: "root"
+        mode: 0700
+
+    - name: "Import Redis server configurations redis@{{ redis_port }}"
+      ansible.builtin.template:
+        src: "templates/redis.conf.j2"
+        dest: "{{ redis_conf }}"
+        owner: "redis"
+        group: "redis"
+        mode: 0744
+
+    - name: "Enable and start Redis"
+      register: redis_service_status
+      failed_when: not (redis_service_status.state != "started" or redis_service_status.state != "inactive")
+      changed_when: not (redis_service_status.state != "started" or redis_service_status.state != "inactive")
+      ansible.builtin.service:
+        name: "redis@{{ redis_port }}"
+        state: "started"
+        enabled: yes
