@@ -727,7 +727,7 @@ lua-time-limit 5000
 # started as cluster nodes can. In order to start a Redis instance as a
 # cluster node enable the cluster support uncommenting the following:
 #
-{% if redis_cluster %}
+{% if redis_cluster | default(false) %}
 cluster-enabled yes
 cluster-config-file nodes.conf
 cluster-node-timeout 5000
