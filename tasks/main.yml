@@ -3,7 +3,7 @@
   ansible.builtin.package:
     update_cache: true
     name:
-      - redis
+      - "redis"
 
 - name: "Disable default Redis service"
   block:
@@ -48,24 +48,24 @@
         path: "{{ folder }}"
         state: directory
         recurse: yes
-        group: "redis"
-        owner: "redis"
-        mode: 0744
+        group: "{{ redis_user }}"
+        owner: "{{ redis_group }}"
+        mode: "0744"
 
     - name: "Import Redis service redis@{{ redis_port }}"
       ansible.builtin.template:
         src: "templates/redis.service.j2"
         dest: "/etc/systemd/system/redis@{{ redis_port }}.service"
-        owner: "root"
-        group: "root"
+        owner: "{{ redis_user }}"
+        group: "{{ redis_group }}"
         mode: 0700
 
     - name: "Import Redis server configurations redis@{{ redis_port }}"
       ansible.builtin.template:
         src: "templates/redis.conf.j2"
         dest: "{{ redis_conf }}"
-        owner: "redis"
-        group: "redis"
+        owner: "{{ redis_user }}"
+        group: "{{ redis_group }}"
         mode: 0744
 
     - name: "Enable and start Redis"

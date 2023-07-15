@@ -727,7 +727,7 @@ lua-time-limit 5000
 # started as cluster nodes can. In order to start a Redis instance as a
 # cluster node enable the cluster support uncommenting the following:
 #
-{% if redis_cluster %}
+{% if redis_cluster | default(false) %}
 cluster-enabled yes
 cluster-config-file nodes.conf
 cluster-node-timeout 5000
@@ -1067,12 +1067,12 @@ hz 10
 # big latency spikes.
 aof-rewrite-incremental-fsync yes
 
-{% if redis_ssl %}
+{% if redis_ssl | default(false) %}
 ############################### SSL/TLS CONFIG ###############################
 port 0
 tls-port {{ redis_port }}
 
-{% if redis_cluster %}
+{% if redis_cluster | default(false) %}
 tls-cluster yes
 tls-replication yes
 {% endif %}
