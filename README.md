@@ -166,12 +166,12 @@ inv_redis_ports:
   - 6381
 
 inv_redis_ssl: true
-inv_redis_ssl_domain: "my.redis-cluster.domain.tld"
+inv_redis_ssl_domain: "my-redis-cluster.domain.tld"
 inv_redis_ssl_path: "/etc/redis/ssl"
-inv_redis_ssl_key: "{{ inv_redis_ssl_path }}/{{ inv_redis_ssl_domain }}/{{ inv_redis_ssl_domain }}.key"
-inv_redis_ssl_cert: "{{ inv_redis_ssl_path }}/{{ inv_redis_ssl_domain }}/{{ inv_redis_ssl_domain }}.crt"
-inv_redis_ssl_ca: "/usr/local/share/ca-certificates/My-Local-CA-Authority/My-Local-CA-Authority.crt"
-inv_redis_ssl_auth_client: "yes"
+inv_redis_ssl_key: "{{ inv_redis_ssl_path }}/{{ inv_redis_ssl_domain }}/{{ inv_redis_ssl_domain }}.pem.key"
+inv_redis_ssl_cert: "{{ inv_redis_ssl_path }}/{{ inv_redis_ssl_domain }}/{{ inv_redis_ssl_domain }}.pem.crt"
+inv_redis_ssl_ca: "{{ inv_redis_ssl_path }}/{{ inv_redis_ssl_domain }}/ca-chain.pem.crt"
+inv_redis_ssl_auth_client: "no"
 
 ```
 
@@ -230,8 +230,8 @@ redis-cli -a 'mySecret' --tls --no-auth-warning --cluster create \
 172.17.0.5:6381 \
 --cluster-replicas 2 \
 --cluster-yes \
---cert /etc/redis/ssl/my.redis-cluster.domain.tld/my.redis-cluster.domain.tld.crt \
---key /etc/redis/ssl/my.redis-cluster.domain.tld/my.redis-cluster.domain.tld.key
+--cert /etc/redis/ssl/my-redis-cluster.domain.tld/my-redis-cluster.domain.tld.pem.crt \
+--key /etc/redis/ssl/my-redis-cluster.domain.tld/my-redis-cluster.domain.tld.pem.key
 # --cacert /usr/local/share/ca-certificates/My-Local-CA-Authority/My-Local-CA-Authority.crt \
 # Check activation
 redis-cli -a 'mySecret' --tls --no-auth-warning  \
