@@ -10,25 +10,25 @@
     - name: "Get Redis standalone service current state"
       register: redis_service_status
       ansible.builtin.systemd:
-        name: "redis"
+        name: "redis-server"
     
     - name: "Disable Redis standalone"
       when: redis_service_status.status.ActiveState == "active"
       ansible.builtin.service:
-        name: "redis"
+        name: "redis-server"
         state: "stopped"
         daemon_reload: true
 
     - name: "Check Redis service file"
       register: folder_check
       ansible.builtin.stat:
-        path: "/etc/systemd/system/redis.service"
+        path: "/etc/systemd/system/redis-server.service"
 
     - name: "Remove Redis service file"
       register: folder_check
       when: folder_check.stat.exists
       ansible.builtin.file:
-        path: "/etc/systemd/system/redis.service"
+        path: "/etc/systemd/system/redis-server.service"
         state: absent
 
 - name: "Configure Redis server redis@{{ redis_port }}"
