@@ -18,7 +18,6 @@
 
 An Ansible role to install and configure a Redis server on your host.
 
-
 The Ansible role installs Redis on a target system and offers additional features to facilitate the deployment of Redis as a service. The role supports the installation and execution of Redis in service mode. Additionally, if you want to set up a Redis cluster, it provides the flexibility to create multiple Redis services based on the chosen port number, for example, redis@6378. This enables running multiple Redis instances on a single machine, making it feasible to host three Redis servers on three individual machines, ultimately achieving the required nine Redis servers (3 masters + 2 replicas each).
 
 In the context of a Redis cluster, to establish three master nodes, you would need a total of nine servers, taking into account both master and replica nodes. However, this configuration can be costly due to the number of required servers. To address this concern, the role proposes an alternative approach, allowing the creation of multiple Redis services on a single machine, each identified by a unique port number. By doing so, you can distribute the Redis services across fewer physical servers while still achieving the desired nine Redis servers.
