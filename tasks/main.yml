@@ -8,12 +8,12 @@
 - name: "Disable default Redis service"
   block:
     - name: "Get Redis standalone service current state"
-      register: redis_service_status
+      register: install_redis_service_status
       ansible.builtin.systemd:
         name: "redis-server"
     
     - name: "Disable Redis standalone"
-      when: redis_service_status.status.ActiveState == "active"
+      when: install_redis_service_status.status.ActiveState == "active"
       ansible.builtin.service:
         name: "redis-server"
         state: "stopped"
@@ -31,48 +31,48 @@
         path: "/etc/systemd/system/redis-server.service"
         state: absent
 
-- name: "Configure Redis server redis@{{ redis_port }}"
+- name: "Configure Redis server redis@{{ install_redis_port }}"
   block:
     - name: "Prepare Redis server folders"
       register: output
       changed_when: output.size <= 0
       loop:
-        - "{{ redis_lib_path }}"
-        - "{{ redis_run_path }}"
-        - "{{ redis_log_path }}"
-        - "{{ redis_dir }}"
-        - "{{ redis_path }}"
+        - "{{ install_redis_lib_path }}"
+        - "{{ install_redis_run_path }}"
+        - "{{ install_redis_log_path }}"
+        - "{{ install_redis_dir }}"
+        - "{{ install_redis_path }}"
       loop_control:
         loop_var: folder
       ansible.builtin.file:
         path: "{{ folder }}"
         state: directory
         recurse: yes
-        group: "{{ redis_user }}"
-        owner: "{{ redis_group }}"
-        mode: "0744"
+        group: "{{ install_redis_user }}"
+        owner: "{{ install_redis_group }}"
+        mode: "0700"
 
-    - name: "Import Redis service redis@{{ redis_port }}"
+    - name: "Import Redis service redis@{{ install_redis_port }}"
       ansible.builtin.template:
         src: "templates/redis.service.j2"
-        dest: "/etc/systemd/system/redis@{{ redis_port }}.service"
-        owner: "{{ redis_user }}"
-        group: "{{ redis_group }}"
-        mode: 0700
+        dest: "/etc/systemd/system/redis@{{ install_redis_port }}.service"
+        owner: "{{ install_redis_user }}"
+        group: "{{ install_redis_group }}"
+        mode: "0700"
 
-    - name: "Import Redis server configurations redis@{{ redis_port }}"
+    - name: "Import Redis server configurations redis@{{ install_redis_port }}"
       ansible.builtin.template:
         src: "templates/redis.conf.j2"
-        dest: "{{ redis_conf }}"
-        owner: "{{ redis_user }}"
-        group: "{{ redis_group }}"
-        mode: 0744
+        dest: "{{ install_redis_conf }}"
+        owner: "{{ install_redis_user }}"
+        group: "{{ install_redis_group }}"
+        mode: "0700"
 
     - name: "Enable and start Redis"
-      register: redis_service_status
-      failed_when: not (redis_service_status.state != "started" or redis_service_status.state != "inactive")
-      changed_when: not (redis_service_status.state != "started" or redis_service_status.state != "inactive")
+      register: install_redis_service_status
+      failed_when: not (install_redis_service_status.state != "started" or install_redis_service_status.state != "inactive")
+      changed_when: not (install_redis_service_status.state != "started" or install_redis_service_status.state != "inactive")
       ansible.builtin.service:
-        name: "redis@{{ redis_port }}"
+        name: "redis@{{ install_redis_port }}"
         state: "started"
         enabled: yes

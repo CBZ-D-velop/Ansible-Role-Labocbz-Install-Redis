@@ -1,30 +1,30 @@
 ---
-redis_bind: "0.0.0.0"
-redis_port: 6379
-redis_proteced_mode: "no"
-redis_loglevel: "notice"
-redis_requirepass: "mySecret"
+install_redis_bind: "0.0.0.0"
+install_redis_port: 6379
+install_redis_proteced_mode: "no"
+install_redis_loglevel: "notice"
+install_redis_requirepass: "mySecret"
 
-redis_cluster: false
-redis_cluster_replicas: 2
-redis_cluster_bootstrap: true
+install_redis_cluster: false
+install_redis_cluster_replicas: 2
+install_redis_cluster_bootstrap: true
 
-redis_lib_path: "/var/lib/redis/redis-server-{{ redis_port }}"
-redis_run_path: "/var/run/redis/redis-server-{{ redis_port }}"
-redis_log_path: "/var/log/redis/redis-server-{{ redis_port }}"
+install_redis_lib_path: "/var/lib/redis/redis-server-{{ install_redis_port }}"
+install_redis_run_path: "/var/run/redis/redis-server-{{ install_redis_port }}"
+install_redis_log_path: "/var/log/redis/redis-server-{{ install_redis_port }}"
 
-redis_dir: "{{ redis_lib_path }}"
-redis_logfile: "{{ redis_log_path }}/redis-server-{{ redis_port }}.log"
-redis_path: "/etc/redis/redis-server-{{ redis_port }}"
-redis_conf: "{{ redis_path }}/redis.conf"
+install_redis_dir: "{{ install_redis_lib_path }}"
+install_redis_logfile: "{{ install_redis_log_path }}/redis-server-{{ install_redis_port }}.log"
+install_redis_path: "/etc/redis/redis-server-{{ install_redis_port }}"
+install_redis_conf: "{{ install_redis_path }}/redis.conf"
 
-redis_ssl: true
-redis_ssl_domain: "my.redis-cluster.domain.tld"
-redis_ssl_path: "/etc/redis/ssl"
-redis_ssl_key: "{{ redis_ssl_path }}/{{ redis_ssl_domain }}/{{ redis_ssl_domain }}.key"
-redis_ssl_cert: "{{ redis_ssl_path }}/{{ redis_ssl_domain }}/{{ redis_ssl_domain }}.crt"
-redis_ssl_ca: "/etc/ssl/cacerts"
-redis_ssl_auth_client: no
+install_redis_ssl: true
+install_redis_ssl_domain: "my.redis-cluster.domain.tld"
+install_redis_ssl_path: "/etc/redis/ssl"
+install_redis_ssl_key: "{{ install_redis_ssl_path }}/{{ install_redis_ssl_domain }}/{{ install_redis_ssl_domain }}.key"
+install_redis_ssl_cert: "{{ install_redis_ssl_path }}/{{ install_redis_ssl_domain }}/{{ install_redis_ssl_domain }}.crt"
+install_redis_ssl_ca: "/etc/ssl/cacerts"
+install_redis_ssl_auth_client: no
 
-redis_user: "redis"
-redis_group: "{{ redis_user }}"
+install_redis_user: "redis"
+install_redis_group: "redis"
