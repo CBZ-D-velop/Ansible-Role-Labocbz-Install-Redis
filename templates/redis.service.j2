@@ -11,12 +11,12 @@ Documentation=http://redis.io/documentation, man:redis-server(1)
 
 [Service]
 Type=notify
-ExecStart=/usr/bin/redis-server {{ redis_conf }} --supervised systemd --daemonize no
-PIDFile=/run/redis/redis-server-{{ redis_port }}.pid
+ExecStart=/usr/bin/redis-server {{ install_redis_conf }} --supervised systemd --daemonize no
+PIDFile=/run/redis/redis-server-{{ install_redis_port }}.pid
 TimeoutStopSec=0
 Restart=always
-User={{ redis_user }}
-Group={{ redis_group }}
+User={{ install_redis_user }}
+Group={{ install_redis_group }}
 RuntimeDirectory=redis
 RuntimeDirectoryMode=2755
 
@@ -26,9 +26,9 @@ LimitNOFILE=65535
 PrivateDevices=yes
 ProtectHome=yes
 ReadOnlyDirectories=/
-ReadWritePaths=-{{ redis_lib_path }}
-ReadWritePaths=-{{ redis_run_path }}
-ReadWritePaths=-{{ redis_log_path }}
+ReadWritePaths=-{{ install_redis_lib_path }}
+ReadWritePaths=-{{ install_redis_run_path }}
+ReadWritePaths=-{{ install_redis_log_path }}
 
 NoNewPrivileges=true
 CapabilityBoundingSet=CAP_SETGID CAP_SETUID CAP_SYS_RESOURCE
@@ -44,7 +44,7 @@ RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
 # permit writing there by default. If you are not using this feature, it is
 # recommended that you replace the following lines with "ProtectSystem=full".
 ProtectSystem=true
-ReadWriteDirectories=-{{ redis_path }}
+ReadWriteDirectories=-{{ install_redis_path }}
 
 [Install]
 WantedBy=multi-user.target
