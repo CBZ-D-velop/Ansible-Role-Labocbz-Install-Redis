@@ -42,6 +42,7 @@
         - "{{ install_redis_log_path }}"
         - "{{ install_redis_dir }}"
         - "{{ install_redis_path }}"
+        - "/var/log/redis"
       loop_control:
         loop_var: folder
       ansible.builtin.file:
@@ -75,4 +76,13 @@
       ansible.builtin.service:
         name: "redis@{{ install_redis_port }}"
         state: "started"
+        enabled: yes
+
+    - name: "Restart Redis"
+      register: install_redis_service_status
+      failed_when: not (install_redis_service_status.state != "started" or install_redis_service_status.state != "inactive")
+      changed_when: not (install_redis_service_status.state != "started" or install_redis_service_status.state != "inactive")
+      ansible.builtin.service:
+        name: "redis@{{ install_redis_port }}"
+        state: "restarted"
         enabled: yes
