@@ -11,7 +11,7 @@ Documentation=http://redis.io/documentation, man:redis-server(1)
 
 [Service]
 Type=notify
-ExecStart=/usr/bin/redis-server /etc/redis/redis.conf --supervised systemd --daemonize no
+ExecStart=/usr/bin/redis-server /etc/redis/sentinel.conf --sentinel --supervised systemd --daemonize no
 PIDFile=/run/redis/redis-server.pid
 TimeoutStartSec=0
 TimeoutStopSec=0
@@ -68,4 +68,4 @@ ExecPaths=/usr/bin/redis-server /usr/lib /lib
 
 [Install]
 WantedBy=multi-user.target
-Alias=redis.service
+Alias=sentinel.service

@@ -1,7 +1,7 @@
 ##############################
 #                            #
 # Ansible / Tower managed on #
-#                            #SSSSsss
+#                            #
 ##############################
 
 # Redis configuration file example.
@@ -285,6 +285,14 @@ dir /var/lib/redis
 # refuse the slave request.
 #
 # masterauth
+{% if install_redis__cluster | default(false) %}
+{% if inventory_hostname != install_redis__initial_master %}
+slaveof {{ install_redis__initial_master }} {{ install_redis__port }}
+{% endif %}
+masterauth {{ install_redis__requirepass }}
+replica-announce-ip {{ inventory_hostname }}
+repl-backlog-size 512mb
+{% endif %}
 
 # When a slave loses its connection with the master, or when the replication
 # is still in progress, the slave can act in two different ways:
@@ -735,14 +743,7 @@ lua-time-limit 5000
 # started as cluster nodes can. In order to start a Redis instance as a
 # cluster node enable the cluster support uncommenting the following:
 #
-{% if install_redis__cluster | default(false) %}
-cluster-enabled yes
-cluster-config-file nodes.conf
-cluster-node-timeout 5000
-
-{% else %}
 cluster-enabled no
-{% endif %}
 
 # Every cluster node has a cluster configuration file. This file is not
 # intended to be edited by hand. It is created and updated by Redis nodes.
@@ -1083,7 +1084,6 @@ tls-key-file {{ install_redis__ssl_key }}
 tls-protocols "TLSv1.2 TLSv1.3"
 
 {% if install_redis__cluster | default(false) %}
-tls-cluster yes
 tls-replication yes
 {% endif %}
 

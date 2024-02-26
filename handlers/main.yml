@@ -16,3 +16,21 @@
     name: "redis-server"
     state: "restarted"
     daemon_reload: true
+
+- name: "Enable and start Sentinel"
+  register: install_redis__sentinel_service_status
+  changed_when: install_redis__sentinel_service_status.state != "started"
+  throttle: 1
+  ansible.builtin.service:
+    name: "redis-sentinel"
+    state: "started"
+    enabled: yes
+
+- name: "Restart Sentinel"
+  register: install_redis__sentinel_service_status
+  changed_when: install_redis__sentinel_service_status.state != "restarted"
+  throttle: 1
+  ansible.builtin.service:
+    name: "redis-sentinel"
+    state: "restarted"
+    daemon_reload: true

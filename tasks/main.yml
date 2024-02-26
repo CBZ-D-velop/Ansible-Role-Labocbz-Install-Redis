@@ -13,6 +13,26 @@
     - "Enable and start Redis"
     - "Restart Redis"
   block:
+    - name: "Import Redis service file"
+      ansible.builtin.template:
+        src: "templates/redis-server.service.j2"
+        dest: "/lib/systemd/system/redis-server.service"
+        owner: "root"
+        group: "root"
+        mode: "0600"
+
+    - name: "Import Redis Sentinel service file"
+      when: install_redis__cluster | default(false)
+      notify:
+        - "Enable and start Sentinel"
+        - "Restart Sentinel"
+      ansible.builtin.template:
+        src: "templates/redis-sentinel.service.j2"
+        dest: "/lib/systemd/system/redis-sentinel.service"
+        owner: "root"
+        group: "root"
+        mode: "0600"
+
     - name: "Create / Edit permisions on directories"
       changed_when: false
       loop:
@@ -29,7 +49,7 @@
         group: "{{ install_redis__group }}"
         mode: "0700"
 
-    - name: "Import Redis server configurations"
+    - name: "Import Redis server configuration"
       ansible.builtin.template:
         src: "templates/redis.conf.j2"
         dest: "/etc/redis/redis.conf"
@@ -37,10 +57,12 @@
         group: "{{ install_redis__group }}"
         mode: "0700"
 
-    - name: "Import Redis service file"
+    - name: "Import Redis Sentinel configuration"
+      notify: "Restart Sentinel"
+      when: install_redis__cluster | default(false)
       ansible.builtin.template:
-        src: "templates/redis-server.service.j2"
-        dest: "/lib/systemd/system/redis-server.service"
-        owner: "root"
-        group: "root"
-        mode: "0600"
+        src: "templates/sentinel.conf.j2"
+        dest: "/etc/redis/sentinel.conf"
+        owner: "{{ install_redis__user }}"
+        group: "{{ install_redis__group }}"
+        mode: "0700"

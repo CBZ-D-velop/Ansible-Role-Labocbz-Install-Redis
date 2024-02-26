@@ -293,3 +293,6 @@ Here you can put your change to keep a trace of your work and decisions.
 * [How to set up a Redis Cluster with TLS in a local machine](https://www.dltlabs.com/blog/how-to-set-up-a-redis-cluster-with-tls-in-a-local-machine--679616)
 * [CLUSTER MEET doesn't allow hostname to be used](https://github.com/redis/redis/issues/2410)
 * [Set up a Redis Cluster for Production environments](https://success.outsystems.com/documentation/how_to_guides/infrastructure/configuring_outsystems_with_install_redis__in_memory_session_storage/set_up_a_install_redis__cluster_for_production_environments/)
+* [Marcel Dempers REDIS](https://github.com/marcel-dempers/docker-development-youtube-series/tree/master/storage/redis)
+* [High availability with Redis Sentinel](https://redis.io/docs/management/sentinel/#configuring-sentinel-instances-with-authentication)
+* [How to run Redis Sentinel](https://jameshfisher.com/2019/01/08/how-to-run-redis-sentinel/)

@@ -2,7 +2,7 @@
 install_redis__user: "redis"
 install_redis__group: "redis"
 
-install_redis__bind: "0.0.0.0"
+install_redis__bind: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
 install_redis__port: 6379
 
 install_redis__proteced_mode: "no"
@@ -11,6 +11,9 @@ install_redis__requirepass: "mySecret"
 
 install_redis__cluster: false
 install_redis__cluster_port: 16379
+install_redis__initial_master: "srv1.domain.tld"
+install_redis__initial_mastername: "mymaster"
+install_redis__sentinel_port: 5000
 
 install_redis__log_path: "/var/log/redis"
 install_redis__logfile: "{{ install_redis__log_path }}/redis.log"
