@@ -109,32 +109,32 @@ Some vars a required to run this role:
 
 ```YAML
 ---
-install_redis_bind: "0.0.0.0"
-install_redis_port: 6379
-install_redis_proteced_mode: "no"
-install_redis_loglevel: "notice"
-install_redis_requirepass: "mySecret"
+install_redis__bind: "0.0.0.0"
+install_redis__port: 6379
+install_redis__proteced_mode: "no"
+install_redis__loglevel: "notice"
+install_redis__requirepass: "mySecret"
 
-install_redis_cluster: false
-install_redis_cluster_replicas: 2
-install_redis_cluster_bootstrap: true
+install_redis__cluster: false
+install_redis__cluster_replicas: 2
+install_redis__cluster_bootstrap: true
 
-install_redis_lib_path: "/var/lib/redis/redis-server-{{ install_redis_port }}"
-install_redis_run_path: "/var/run/redis/redis-server-{{ install_redis_port }}"
-install_redis_log_path: "/var/log/redis/redis-server-{{ install_redis_port }}"
+install_redis__lib_path: "/var/lib/redis/redis-server-{{ install_redis__port }}"
+install_redis__run_path: "/var/run/redis/redis-server-{{ install_redis__port }}"
+install_redis__log_path: "/var/log/redis/redis-server-{{ install_redis__port }}"
 
-install_redis_dir: "{{ install_redis_lib_path }}"
-install_redis_logfile: "{{ install_redis_log_path }}/redis-server-{{ install_redis_port }}.log"
-install_redis_path: "/etc/redis/redis-server-{{ install_redis_port }}"
-install_redis_conf: "{{ install_redis_path }}/redis.conf"
+install_redis__dir: "{{ install_redis__lib_path }}"
+install_redis__logfile: "{{ install_redis__log_path }}/redis-server-{{ install_redis__port }}.log"
+install_redis__path: "/etc/redis/redis-server-{{ install_redis__port }}"
+install_redis__conf: "{{ install_redis__path }}/redis.conf"
 
-install_redis_ssl: true
-install_redis_ssl_domain: "my.redis-cluster.domain.tld"
-install_redis_ssl_path: "/etc/redis/ssl"
-install_redis_ssl_key: "{{ install_redis_ssl_path }}/{{ install_redis_ssl_domain }}/{{ install_redis_ssl_domain }}.key"
-install_redis_ssl_cert: "{{ install_redis_ssl_path }}/{{ install_redis_ssl_domain }}/{{ install_redis_ssl_domain }}.crt"
-install_redis_ssl_ca: "/etc/ssl/cacerts"
-install_redis_ssl_auth_client: no
+install_redis__ssl: true
+install_redis__ssl_domain: "my.redis-cluster.domain.tld"
+install_redis__ssl_path: "/etc/redis/ssl"
+install_redis__ssl_key: "{{ install_redis__ssl_path }}/{{ install_redis__ssl_domain }}/{{ install_redis__ssl_domain }}.key"
+install_redis__ssl_cert: "{{ install_redis__ssl_path }}/{{ install_redis__ssl_domain }}/{{ install_redis__ssl_domain }}.crt"
+install_redis__ssl_ca: "/etc/ssl/cacerts"
+install_redis__ssl_auth_client: no
 
 ```
 
@@ -147,30 +147,30 @@ In order to surchage vars, you have multiples possibilities but for mains cases 
 ```YAML
 # From inventory
 ---
-inv_install_redis_bind: "0.0.0.0"
-inv_install_redis_proteced_mode: "no"
-inv_install_redis_loglevel: "notice"
-inv_install_redis_requirepass: "mySecret"
+inv_install_redis__bind: "0.0.0.0"
+inv_install_redis__proteced_mode: "no"
+inv_install_redis__loglevel: "notice"
+inv_install_redis__requirepass: "mySecret"
 
-inv_install_redis_cluster: true
-inv_install_redis_cluster_replicas: 2
-inv_install_redis_cluster_bootstrap: true
+inv_install_redis__cluster: true
+inv_install_redis__cluster_replicas: 2
+inv_install_redis__cluster_bootstrap: true
 
-inv_install_redis_path: "/etc/redis/redis-server-{{ port }}"
-inv_install_redis_conf: "{{ inv_install_redis_path }}/redis.conf"
+inv_install_redis__path: "/etc/redis/redis-server-{{ port }}"
+inv_install_redis__conf: "{{ inv_install_redis__path }}/redis.conf"
 
-inv_install_redis_ports:
+inv_install_redis__ports:
   - 6379
   - 6380
   - 6381
 
-inv_install_redis_ssl: true
-inv_install_redis_ssl_domain: "my-redis-cluster.domain.tld"
-inv_install_redis_ssl_path: "/etc/redis/ssl"
-inv_install_redis_ssl_key: "{{ inv_install_redis_ssl_path }}/{{ inv_install_redis_ssl_domain }}/{{ inv_install_redis_ssl_domain }}.pem.key"
-inv_install_redis_ssl_cert: "{{ inv_install_redis_ssl_path }}/{{ inv_install_redis_ssl_domain }}/{{ inv_install_redis_ssl_domain }}.pem.crt"
-inv_install_redis_ssl_ca: "{{ inv_install_redis_ssl_path }}/{{ inv_install_redis_ssl_domain }}/ca-chain.pem.crt"
-inv_install_redis_ssl_auth_client: "no"
+inv_install_redis__ssl: true
+inv_install_redis__ssl_domain: "my-redis-cluster.domain.tld"
+inv_install_redis__ssl_path: "/etc/redis/ssl"
+inv_install_redis__ssl_key: "{{ inv_install_redis__ssl_path }}/{{ inv_install_redis__ssl_domain }}/{{ inv_install_redis__ssl_domain }}.pem.key"
+inv_install_redis__ssl_cert: "{{ inv_install_redis__ssl_path }}/{{ inv_install_redis__ssl_domain }}/{{ inv_install_redis__ssl_domain }}.pem.crt"
+inv_install_redis__ssl_ca: "{{ inv_install_redis__ssl_path }}/{{ inv_install_redis__ssl_domain }}/ca-chain.pem.crt"
+inv_install_redis__ssl_auth_client: "no"
 
 ```
 
@@ -188,27 +188,27 @@ To run this role, you can copy the molecule/default/converge.yml playbook and ad
 - name: "Include labocbz.install_redis"
   tags:
     - "labocbz.install_redis"
-  loop: "{{ inv_install_redis_ports }}"
+  loop: "{{ inv_install_redis__ports }}"
   loop_control:
     loop_var: port
   vars:
-    install_redis_bind: "{{ inv_install_redis_bind }}"
-    install_redis_port: "{{ port }}"
-    install_redis_proteced_mode: "{{ inv_install_redis_proteced_mode }}"
-    install_redis_loglevel: "{{ inv_install_redis_loglevel }}"
-    install_redis_requirepass: "{{ inv_install_redis_requirepass }}"
-    install_redis_cluster: "{{ inv_install_redis_cluster }}"
-    install_redis_path: "{{ inv_install_redis_path }}"
-    install_redis_conf: "{{ inv_install_redis_conf }}"
-    install_redis_ssl: "{{ inv_install_redis_ssl }}"
-    install_redis_ssl_domain: "{{ inv_install_redis_ssl_domain }}"
-    install_redis_ssl_path: "{{ inv_install_redis_ssl_path }}"
-    install_redis_ssl_key: "{{ inv_install_redis_ssl_key }}"
-    install_redis_ssl_cert: "{{ inv_install_redis_ssl_cert }}"
-    install_redis_ssl_ca: "{{ inv_install_redis_ssl_ca }}"
-    install_redis_ssl_auth_client: "{{ inv_install_redis_ssl_auth_client }}"
-    install_redis_cluster_replicas: "{{ inv_install_redis_cluster_replicas }}"
-    install_redis_cluster_bootstrap: "{{ inv_install_redis_cluster_bootstrap }}"
+    install_redis__bind: "{{ inv_install_redis__bind }}"
+    install_redis__port: "{{ port }}"
+    install_redis__proteced_mode: "{{ inv_install_redis__proteced_mode }}"
+    install_redis__loglevel: "{{ inv_install_redis__loglevel }}"
+    install_redis__requirepass: "{{ inv_install_redis__requirepass }}"
+    install_redis__cluster: "{{ inv_install_redis__cluster }}"
+    install_redis__path: "{{ inv_install_redis__path }}"
+    install_redis__conf: "{{ inv_install_redis__conf }}"
+    install_redis__ssl: "{{ inv_install_redis__ssl }}"
+    install_redis__ssl_domain: "{{ inv_install_redis__ssl_domain }}"
+    install_redis__ssl_path: "{{ inv_install_redis__ssl_path }}"
+    install_redis__ssl_key: "{{ inv_install_redis__ssl_key }}"
+    install_redis__ssl_cert: "{{ inv_install_redis__ssl_cert }}"
+    install_redis__ssl_ca: "{{ inv_install_redis__ssl_ca }}"
+    install_redis__ssl_auth_client: "{{ inv_install_redis__ssl_auth_client }}"
+    install_redis__cluster_replicas: "{{ inv_install_redis__cluster_replicas }}"
+    install_redis__cluster_bootstrap: "{{ inv_install_redis__cluster_bootstrap }}"
   ansible.builtin.include_role:
     name: "labocbz.install_redis"
 ```
@@ -267,6 +267,11 @@ Here you can put your change to keep a trace of your work and decisions.
 
 * Role can now use system users and address groups
 
+### 2024-02-21: Fix and CI
+
+* Added support for new CI base
+* Edit all vars with __
+
 ## Authors
 
 * Lord Robin Crombez
@@ -279,7 +284,7 @@ Here you can put your change to keep a trace of your work and decisions.
 * [I am trying to enable TLS for Redis cluster](https://groups.google.com/g/redis-db/c/RxNuJX-d65A)
 * [Clustering in Redis](https://www.youtube.com/watch?v=3WOfXRjYnGA)
 * [How to Create a Cluster in Redis](https://www.youtube.com/watch?v=N8BkmdZzxDg)
-* [creating_a_install_redis_cluster.md](https://gist.github.com/justincastilla/7bbff2fdab5bd039aaee5e2f725dab80)
+* [creating_a_install_redis__cluster.md](https://gist.github.com/justincastilla/7bbff2fdab5bd039aaee5e2f725dab80)
 * [Redis via ssl and nc 21.0.3](https://help.nextcloud.com/t/redis-via-ssl-and-nc-21-0-3/119656)
 * [Can’t open the log file: Read-only file system](https://rtfm.co.ua/en/redis-cant-open-the-log-file-read-only-file-system-2/)
 * [redis service fails with permission denied on append file](https://stackoverflow.com/questions/55201167/redis-service-fails-with-permission-denied-on-append-file)
@@ -287,4 +292,4 @@ Here you can put your change to keep a trace of your work and decisions.
 * [Tuto Redis : Le cluster redis 3.0](https://www.wanadev.fr/30-tuto-redis-le-cluster-redis-3-0/)
 * [How to set up a Redis Cluster with TLS in a local machine](https://www.dltlabs.com/blog/how-to-set-up-a-redis-cluster-with-tls-in-a-local-machine--679616)
 * [CLUSTER MEET doesn't allow hostname to be used](https://github.com/redis/redis/issues/2410)
-* [Set up a Redis Cluster for Production environments](https://success.outsystems.com/documentation/how_to_guides/infrastructure/configuring_outsystems_with_install_redis_in_memory_session_storage/set_up_a_install_redis_cluster_for_production_environments/)
+* [Set up a Redis Cluster for Production environments](https://success.outsystems.com/documentation/how_to_guides/infrastructure/configuring_outsystems_with_install_redis__in_memory_session_storage/set_up_a_install_redis__cluster_for_production_environments/)

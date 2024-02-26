@@ -65,7 +65,7 @@
 # JUST COMMENT THE FOLLOWING LINE.
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #bind 127.0.0.1
-bind {{ install_redis_bind }}
+bind {{ install_redis__bind }}
 
 # Protected mode is a layer of security protection, in order to avoid that
 # Redis instances left open on the internet are accessed and exploited.
@@ -84,11 +84,19 @@ bind {{ install_redis_bind }}
 # you are sure you want clients from other hosts to connect to Redis
 # even if no authentication is configured, nor a specific set of interfaces
 # are explicitly listed using the "bind" directive.
-protected-mode {{ install_redis_proteced_mode }}
+protected-mode {{ install_redis__proteced_mode }}
 
 # Accept connections on the specified port, default is 6379 (IANA #815344).
 # If port 0 is specified Redis will not listen on a TCP socket.
-port {{ install_redis_port }}
+{% if install_redis__ssl | default(false) %}
+port 0
+tls-port {{ install_redis__port }}
+{% else %}
+port {{ install_redis__port }}
+{% endif %}
+{% if install_redis__cluster| default(false) %}
+cluster-port {{ install_redis__cluster_port }}
+{% endif %}
 
 # TCP listen() backlog.
 #
@@ -154,7 +162,7 @@ supervised no
 #
 # Creating a pid file is best effort: if Redis is not able to create it
 # nothing bad happens, the server will start and run normally.
-pidfile /var/run/redis/redis-server-{{ install_redis_port }}.pid
+pidfile /var/run/redis.pid
 
 # Specify the server verbosity level.
 # This can be one of:
@@ -162,12 +170,12 @@ pidfile /var/run/redis/redis-server-{{ install_redis_port }}.pid
 # verbose (many rarely useful info, but not a mess like the debug level)
 # notice (moderately verbose, what you want in production probably)
 # warning (only very important / critical messages are logged)
-loglevel {{ install_redis_loglevel }}
+loglevel {{ install_redis__loglevel }}
 
 # Specify the log file name. Also the empty string can be used to force
 # Redis to log on the standard output. Note that if you use standard
 # output for logging but daemonize, logs will be sent to /dev/null
-logfile {{ install_redis_logfile }}
+logfile {{ install_redis__logfile }}
 
 # To enable logging to the system logger, just set 'syslog-enabled' to yes,
 # and optionally update the other syslog parameters to suit your needs.
@@ -251,7 +259,7 @@ dbfilename dump.rdb
 # The Append Only File will also be created inside this directory.
 #
 # Note that you must specify a directory here, not a file name.
-dir {{ install_redis_dir }}
+dir /var/lib/redis
 
 ################################# REPLICATION #################################
 
@@ -484,8 +492,8 @@ slave-priority 100
 # 150k passwords per second against a good box. This means that you should
 # use a very strong password otherwise it will be very easy to break.
 #
-{% if install_redis_requirepass is defined %}
-requirepass {{ install_redis_requirepass }}
+{% if install_redis__requirepass is defined %}
+requirepass {{ install_redis__requirepass }}
 {% endif %}
 
 # Command renaming.
@@ -727,7 +735,7 @@ lua-time-limit 5000
 # started as cluster nodes can. In order to start a Redis instance as a
 # cluster node enable the cluster support uncommenting the following:
 #
-{% if install_redis_cluster | default(false) %}
+{% if install_redis__cluster | default(false) %}
 cluster-enabled yes
 cluster-config-file nodes.conf
 cluster-node-timeout 5000
@@ -1067,20 +1075,26 @@ hz 10
 # big latency spikes.
 aof-rewrite-incremental-fsync yes
 
-{% if install_redis_ssl | default(false) %}
+{% if install_redis__ssl | default(false) %}
 ############################### SSL/TLS CONFIG ###############################
-port 0
-tls-port {{ install_redis_port }}
 
-{% if install_redis_cluster | default(false) %}
+tls-cert-file {{ install_redis__ssl_cert }}
+tls-key-file {{ install_redis__ssl_key }}
+tls-protocols "TLSv1.2 TLSv1.3"
+
+{% if install_redis__cluster | default(false) %}
 tls-cluster yes
 tls-replication yes
 {% endif %}
 
-tls-cert-file {{ install_redis_ssl_cert }}
-tls-key-file {{ install_redis_ssl_key }}
-tls-ca-cert-file {{ install_redis_ssl_ca }}
+{% if (install_redis__cluster | default(false)) or (install_redis__ssl_client_auth | default(false)) %}
+tls-ca-cert-file {{ install_redis__ssl_ca }}
+{% endif %}
 
-tls-protocols "TLSv1.2 TLSv1.3"
-tls-auth-clients {{ install_redis_ssl_auth_client }}
+{% if install_redis__ssl_client_auth | default(false) %}
+tls-auth-clients yes
+{% else %}
+tls-auth-clients no
+{% endif %}
+
 {% endif %}

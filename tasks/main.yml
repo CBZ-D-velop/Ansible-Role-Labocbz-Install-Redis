@@ -1,88 +1,46 @@
 ---
 - name: "Install packages"
+  notify:
+    - "Enable and start Redis"
+    - "Restart Redis"
   ansible.builtin.package:
     update_cache: true
     name:
       - "redis"
 
-- name: "Disable default Redis service"
+- name: "Configure Redis server"
+  notify:
+    - "Enable and start Redis"
+    - "Restart Redis"
   block:
-    - name: "Get Redis standalone service current state"
-      register: install_redis_service_status
-      ansible.builtin.systemd:
-        name: "redis-server"
-    
-    - name: "Disable Redis standalone"
-      when: install_redis_service_status.status.ActiveState == "active"
-      ansible.builtin.service:
-        name: "redis-server"
-        state: "stopped"
-        daemon_reload: true
-
-    - name: "Check Redis service file"
-      register: folder_check
-      ansible.builtin.stat:
-        path: "/etc/systemd/system/redis-server.service"
-
-    - name: "Remove Redis service file"
-      register: folder_check
-      when: folder_check.stat.exists
-      ansible.builtin.file:
-        path: "/etc/systemd/system/redis-server.service"
-        state: absent
-
-- name: "Configure Redis server redis@{{ install_redis_port }}"
-  block:
-    - name: "Prepare Redis server folders"
-      register: output
-      changed_when: output.size <= 0
+    - name: "Create / Edit permisions on directories"
+      changed_when: false
       loop:
-        - "{{ install_redis_lib_path }}"
-        - "{{ install_redis_run_path }}"
-        - "{{ install_redis_log_path }}"
-        - "{{ install_redis_dir }}"
-        - "{{ install_redis_path }}"
-        - "/var/log/redis"
+        - "{{ install_redis__log_path }}"
+        - "/etc/redis"
+        - "/var/lib/redis"
       loop_control:
-        loop_var: folder
+        loop_var: path
       ansible.builtin.file:
-        path: "{{ folder }}"
+        path: "{{ path }}"
         state: directory
         recurse: yes
-        group: "{{ install_redis_user }}"
-        owner: "{{ install_redis_group }}"
+        owner: "{{ install_redis__user }}"
+        group: "{{ install_redis__group }}"
         mode: "0700"
 
-    - name: "Import Redis service redis@{{ install_redis_port }}"
-      ansible.builtin.template:
-        src: "templates/redis.service.j2"
-        dest: "/etc/systemd/system/redis@{{ install_redis_port }}.service"
-        owner: "{{ install_redis_user }}"
-        group: "{{ install_redis_group }}"
-        mode: "0700"
-
-    - name: "Import Redis server configurations redis@{{ install_redis_port }}"
+    - name: "Import Redis server configurations"
       ansible.builtin.template:
         src: "templates/redis.conf.j2"
-        dest: "{{ install_redis_conf }}"
-        owner: "{{ install_redis_user }}"
-        group: "{{ install_redis_group }}"
+        dest: "/etc/redis/redis.conf"
+        owner: "{{ install_redis__user }}"
+        group: "{{ install_redis__group }}"
         mode: "0700"
 
-    - name: "Enable and start Redis"
-      register: install_redis_service_status
-      failed_when: not (install_redis_service_status.state != "started" or install_redis_service_status.state != "inactive")
-      changed_when: not (install_redis_service_status.state != "started" or install_redis_service_status.state != "inactive")
-      ansible.builtin.service:
-        name: "redis@{{ install_redis_port }}"
-        state: "started"
-        enabled: yes
-
-    - name: "Restart Redis"
-      register: install_redis_service_status
-      failed_when: not (install_redis_service_status.state != "started" or install_redis_service_status.state != "inactive")
-      changed_when: not (install_redis_service_status.state != "started" or install_redis_service_status.state != "inactive")
-      ansible.builtin.service:
-        name: "redis@{{ install_redis_port }}"
-        state: "restarted"
-        enabled: yes
+    - name: "Import Redis service file"
+      ansible.builtin.template:
+        src: "templates/redis-server.service.j2"
+        dest: "/lib/systemd/system/redis-server.service"
+        owner: "root"
+        group: "root"
+        mode: "0600"

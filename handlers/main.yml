@@ -1,1 +1,18 @@
 ---
+- name: "Enable and start Redis"
+  register: install_redis__service_status
+  changed_when: install_redis__service_status.state != "started"
+  throttle: 1
+  ansible.builtin.service:
+    name: "redis-server"
+    state: "started"
+    enabled: yes
+
+- name: "Restart Redis"
+  register: install_redis__service_status
+  changed_when: install_redis__service_status.state != "restarted"
+  throttle: 1
+  ansible.builtin.service:
+    name: "redis-server"
+    state: "restarted"
+    daemon_reload: true
