@@ -274,7 +274,7 @@ Here you can put your change to keep a trace of your work and decisions.
 * Added test
 * Added multi cluster with Molecule
 * Added cluster start (Sentinel)
-* Removed idempotency
+* Removed idempotency (Sentinel edition files)
 
 ## Authors
 
