@@ -10,7 +10,6 @@ install_redis__loglevel: "notice"
 install_redis__requirepass: "mySecret"
 
 install_redis__cluster: false
-install_redis__cluster_port: 16379
 install_redis__initial_master: "srv1.domain.tld"
 install_redis__initial_mastername: "mymaster"
 install_redis__sentinel_port: 5000

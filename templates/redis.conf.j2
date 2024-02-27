@@ -94,9 +94,6 @@ tls-port {{ install_redis__port }}
 {% else %}
 port {{ install_redis__port }}
 {% endif %}
-{% if install_redis__cluster | default(false) %}
-cluster-port {{ install_redis__cluster_port }}
-{% endif %}
 
 # TCP listen() backlog.
 #

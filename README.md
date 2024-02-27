@@ -271,6 +271,9 @@ Here you can put your change to keep a trace of your work and decisions.
 
 * Added support for new CI base
 * Edit all vars with __
+* Added test
+* Added multi cluster with Molecule
+* added cluster start (Sentinel)
 
 ## Authors
 

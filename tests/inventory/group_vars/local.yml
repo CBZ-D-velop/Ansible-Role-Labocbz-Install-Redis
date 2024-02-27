@@ -1,5 +1,5 @@
 ---
-install_redis__cluster_hosts:
+inv_install_redis__cluster_hosts:
   - "molecule-local-instance-1-install-redis"
   - "molecule-local-instance-2-install-redis"
   - "molecule-local-instance-3-install-redis"
