@@ -1,7 +1,7 @@
 ---
 inv_install_redis__cluster_hosts:
-  - "molecule-ubuntu-22-instance-1-install-redis"
-  - "molecule-ubuntu-22-instance-2-install-redis"
-  - "molecule-ubuntu-22-instance-3-install-redis"
+  - "molecule-cicd-ubuntu-22-instance-1-install-redis"
+  - "molecule-cicd-ubuntu-22-instance-2-install-redis"
+  - "molecule-cicd-ubuntu-22-instance-3-install-redis"
 
-inv_install_redis__initial_master: "molecule-ubuntu-22-instance-1-install-redis"
+inv_install_redis__initial_master: "molecule-cicd-ubuntu-22-instance-1-install-redis"
