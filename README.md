@@ -273,7 +273,8 @@ Here you can put your change to keep a trace of your work and decisions.
 * Edit all vars with __
 * Added test
 * Added multi cluster with Molecule
-* added cluster start (Sentinel)
+* Added cluster start (Sentinel)
+* Removed idempotency
 
 ## Authors
 
