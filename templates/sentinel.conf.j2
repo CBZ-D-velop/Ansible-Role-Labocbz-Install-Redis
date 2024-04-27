@@ -1,0 +1,30 @@
+##############################
+#                            #
+# Ansible / Tower managed on #
+#                            #
+##############################
+
+{% if install_redis__ssl | default(false) %}
+port 0
+tls-port {{ install_redis__sentinel_port }}
+tls-replication yes
+{% else %}
+port {{ install_redis__sentinel_port }}
+{% endif %}
+
+sentinel monitor {{ install_redis__initial_mastername }} {{ install_redis__initial_master }} {{ install_redis__port }} 2
+sentinel down-after-milliseconds {{ install_redis__initial_mastername }} 5000
+sentinel failover-timeout {{ install_redis__initial_mastername }} 60000
+sentinel parallel-syncs {{ install_redis__initial_mastername }} 1
+sentinel auth-pass {{ install_redis__initial_mastername }} {{ install_redis__requirepass }}
+sentinel resolve-hostnames yes
+sentinel announce-ip {{ inventory_hostname }}
+requirepass {{ install_redis__requirepass }}
+
+{% if (install_redis__ssl | default(false)) or (install_redis__ssl_client_auth | default(false)) %}
+tls-ca-cert-file {{ install_redis__ssl_ca }}
+tls-protocols "TLSv1.2 TLSv1.3"
+
+tls-cert-file {{ install_redis__ssl_cert }}
+tls-key-file {{ install_redis__ssl_key }}
+{% endif %}

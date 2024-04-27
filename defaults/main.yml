@@ -1,30 +1,26 @@
 ---
-install_redis_bind: "0.0.0.0"
-install_redis_port: 6379
-install_redis_proteced_mode: "no"
-install_redis_loglevel: "notice"
-install_redis_requirepass: "mySecret"
+install_redis__user: "redis"
+install_redis__group: "redis"
 
-install_redis_cluster: false
-install_redis_cluster_replicas: 2
-install_redis_cluster_bootstrap: true
+install_redis__bind: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
+install_redis__port: 6379
 
-install_redis_lib_path: "/var/lib/redis/redis-server-{{ install_redis_port }}"
-install_redis_run_path: "/var/run/redis/redis-server-{{ install_redis_port }}"
-install_redis_log_path: "/var/log/redis/redis-server-{{ install_redis_port }}"
+install_redis__proteced_mode: "no"
+install_redis__loglevel: "notice"
+install_redis__requirepass: "mySecret"
 
-install_redis_dir: "{{ install_redis_lib_path }}"
-install_redis_logfile: "{{ install_redis_log_path }}/redis-server-{{ install_redis_port }}.log"
-install_redis_path: "/etc/redis/redis-server-{{ install_redis_port }}"
-install_redis_conf: "{{ install_redis_path }}/redis.conf"
+install_redis__cluster: false
+install_redis__initial_master: "srv1.domain.tld"
+install_redis__initial_mastername: "mymaster"
+install_redis__sentinel_port: 5000
 
-install_redis_ssl: true
-install_redis_ssl_domain: "my.redis-cluster.domain.tld"
-install_redis_ssl_path: "/etc/redis/ssl"
-install_redis_ssl_key: "{{ install_redis_ssl_path }}/{{ install_redis_ssl_domain }}/{{ install_redis_ssl_domain }}.key"
-install_redis_ssl_cert: "{{ install_redis_ssl_path }}/{{ install_redis_ssl_domain }}/{{ install_redis_ssl_domain }}.crt"
-install_redis_ssl_ca: "/etc/ssl/cacerts"
-install_redis_ssl_auth_client: no
+install_redis__log_path: "/var/log/redis"
+install_redis__logfile: "{{ install_redis__log_path }}/redis.log"
 
-install_redis_user: "redis"
-install_redis_group: "redis"
+install_redis__ssl: false
+install_redis__ssl_domain: "my.redis-cluster.domain.tld"
+install_redis__ssl_path: "/etc/redis/ssl"
+install_redis__ssl_key: "{{ install_redis__ssl_path }}/{{ install_redis__ssl_domain }}/{{ install_redis__ssl_domain }}.key"
+install_redis__ssl_cert: "{{ install_redis__ssl_path }}/{{ install_redis__ssl_domain }}/{{ install_redis__ssl_domain }}.crt"
+install_redis__ssl_client_auth: false
+install_redis__ssl_ca: "/etc/ssl/cacerts"
