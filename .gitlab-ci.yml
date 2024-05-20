@@ -29,7 +29,7 @@ variables:
   DOCKER_IMAGE__LINT_YAML: "labocbz/lint-yaml:latest"
   DOCKER_IMAGE__LINT_JINJA: "labocbz/lint-jinja:latest"
   DOCKER_IMAGE__LINT_MARKDOWN: "labocbz/lint-markdown:latest"
-  DOCKER_IMAGE__RUN_ANSIBLE_MOLECULE: "labocbz/run-ansible-molecule:0.8"
+  DOCKER_IMAGE__RUN_ANSIBLE_MOLECULE: "labocbz/run-ansible-molecule:latest"
   DOCKER_IMAGE__ANSIBLETEST_DEBIAN_11: "labocbz/ansibletest-debian-11:latest"
   DOCKER_IMAGE__ANSIBLETEST_DEBIAN_12: "labocbz/ansibletest-debian-12:latest"
   DOCKER_IMAGE__ANSIBLETEST_UBUNTU_22: "labocbz/ansibletest-ubuntu-22:latest"
