@@ -50,6 +50,8 @@ variables:
     - "cp ./.ansible.cfg /root/.ansible.cfg"
     - "[ -f \"./molecule/$SCENARIO/requirements.yml\" ] && ansible-galaxy install -r ./molecule/$SCENARIO/requirements.yml --roles-path=./molecule/$SCENARIO/roles"
   script:
+    - "echo $DOCKER_HOST"
+    - "export DOCKER_HOST=unix:///var/run/docker.sock"
     - "molecule test --scenario-name $SCENARIO"
   allow_failure: false
   rules:
