@@ -17,11 +17,7 @@ sentinel down-after-milliseconds {{ install_redis__initial_mastername }} 5000
 sentinel failover-timeout {{ install_redis__initial_mastername }} 60000
 sentinel parallel-syncs {{ install_redis__initial_mastername }} 1
 sentinel auth-pass {{ install_redis__initial_mastername }} {{ install_redis__requirepass }}
-{% if ansible_os_family == 'Debian' and (ansible_distribution_major_version | int >= 12 ) %}
 sentinel resolve-hostnames yes
-{% else %}
-#sentinel resolve-hostnames yes
-{% endif %}
 sentinel announce-ip {{ inventory_hostname }}
 requirepass {{ install_redis__requirepass }}
 
