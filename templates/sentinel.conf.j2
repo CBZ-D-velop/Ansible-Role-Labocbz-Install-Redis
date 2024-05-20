@@ -17,7 +17,7 @@ sentinel down-after-milliseconds {{ install_redis__initial_mastername }} 5000
 sentinel failover-timeout {{ install_redis__initial_mastername }} 60000
 sentinel parallel-syncs {{ install_redis__initial_mastername }} 1
 sentinel auth-pass {{ install_redis__initial_mastername }} {{ install_redis__requirepass }}
-sentinel resolve-hostnames yes
+#sentinel resolve-hostnames yes
 sentinel announce-ip {{ inventory_hostname }}
 requirepass {{ install_redis__requirepass }}
 
